@@ -449,13 +449,13 @@ endfunction
 function! s:PhpInsertConst(name, value) " {{{
     let l:type = 'string'
     if a:value =~ "^(true|false){1}$"
-        l:type = 'bool'
+        let l:type = 'bool'
     elseif a:value =~ "^\'[\w\W\d]*\'$"
-        l:type = 'string'
+        let l:type = 'string'
     elseif a:value =~ "^\d+$"
-        l:type = 'int'
+        let l:type = 'int'
     elseif a:value =~ "^\d[\.\d]*$"
-        l:type = 'float'
+        let l:type = 'float'
     endif
     let l:annotationStr = '/** @var  ' . l:type . ' ' . a:name . '  */'
     if search(s:php_regex_const_line, 'beW') > 0

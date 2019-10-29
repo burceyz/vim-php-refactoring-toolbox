@@ -448,11 +448,12 @@ endfunction
 
 function! s:PhpInsertConst(name, value) " {{{
     if search(s:php_regex_const_line, 'beW') > 0
+        call append(line('.')+1, '')
         call append(line('.'), 'const ' . a:name . ' = ' . a:value . ';')
     elseif search(s:php_regex_class_line, 'beW') > 0
         call search('{', 'W')
-        call append(line('.'), 'const ' . a:name . ' = ' . a:value . ';')
         call append(line('.')+1, '')
+        call append(line('.'), 'const ' . a:name . ' = ' . a:value . ';')
     else
         call append(line('.'), 'const ' . a:name . ' = ' . a:value . ';')
     endif

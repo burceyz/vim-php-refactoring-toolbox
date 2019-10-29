@@ -448,11 +448,13 @@ endfunction
 
 function! s:PhpInsertConst(name, value) " {{{
     let l:type = 'string'
-    if a:value =~ "^\'[\w\W\d]*\'$"
+    if a:value =~ "^(true|false){1}$"
+        l:type = 'bool'
+    elseif a:value =~ "^\'[\w\W\d]*\'$"
         l:type = 'string'
-    elseif a:value =~ '^\d+$'
+    elseif a:value =~ "^\d+$"
         l:type = 'int'
-    elseif a:value =~ '^\d[\.\d]*$'
+    elseif a:value =~ "^\d[\.\d]*$"
         l:type = 'float'
     endif
     let l:annotationStr = '/** @var  ' . l:type . ' ' . a:name . '  */'

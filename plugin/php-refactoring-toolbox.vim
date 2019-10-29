@@ -310,6 +310,15 @@ function! PhpExtractMethod() range " {{{
             call add(l:output, l:var)
         endif
     endfor
+    let parameterWithTypeList = []
+    for l:p in l:parametersSignature
+        let l:withType = inputdialog('Input Variable Type of ' . l:p . ': ') . ' ' . l:p
+        if empty(l:withType)
+            call add(parameterWithTypeList, l:p)
+        else
+            call add(parameterWithTypeList, l:withType)
+        endif
+    endfor
     normal! `r
     if len(l:output) == 0
         exec "normal! O$this->" . l:name . "(" . join(l:parameters, ", ") . ");\<ESC>k=3="
@@ -321,7 +330,7 @@ function! PhpExtractMethod() range " {{{
         exec "normal! Olist(" . join(l:output, ", ") . ") = $this->" . l:name . "(" . join(l:parameters, ", ") . ");\<ESC>=3="
         let l:return = "return array(" . join(l:output, ", ") . ");\<CR>"
     endif
-    call s:PhpInsertMethod(l:visibility, l:name, l:parametersSignature, @x . l:return)
+    call s:PhpInsertMethod(l:visibility, l:name, parameterWithTypeList, @x . l:return)
     normal! `r
 endfunction
 " }}}
@@ -483,7 +492,7 @@ function! s:PhpInsertMethod(modifiers, name, params, impl) " {{{
     call search(s:php_regex_func_line, 'beW')
     call search('{', 'W')
     exec "normal! %"
-    exec "normal! o\<CR>" . a:modifiers . " function " . a:name . "(" . join(a:params, ", ") . ")\<CR>{\<CR>" . a:impl . "}\<Esc>=a{"
+    exec "normal! o\<CR>" . a:modifiers . " function " . a:name . "(" . join(a:params, ", ") . ") {\<CR>" . a:impl . "}\<Esc>=a{"
 endfunction
 " }}}
 
